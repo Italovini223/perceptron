@@ -66,3 +66,25 @@ if __name__ == '__main__':
 	df_sem_d.to_excel(out_path, index=False)
 	print(f"Arquivo criado por xxpd.py: {out_path}")
 
+
+
+    df_sem_d = df_treinamento_sem_d.copy()
+    df_sem_d['d'] = pd.NA
+
+
+    for i, row in df_treinamento_sem_d.iterrows():
+        x = [row['x1'], row['x2'], row['x3']]
+        
+        U = sum(w * xi for w, xi in zip(pesos_fiais, x)) - limiarDeAtivacao
+        if U >= 0:
+            y = 1
+        else:
+            y = -1
+        df_sem_d.at[i, 'd'] = y
+    
+    df_sem_d.to_excel(TEST_V_PATH, index=False)
+    print(f"Resultados salvos em {TEST_V_PATH}")
+        
+for index, row in df_sem_d.iterrows():
+    print(f"d de treino {index}: row: {row['d']}")
+    print(f"d de teste {index}: row: {df_treinamento.at[index, 'd']}")
