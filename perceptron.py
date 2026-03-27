@@ -1,8 +1,11 @@
 import pandas as pd
 import random
 import os
+import matplotlib.pyplot as plt
+
 import resultados
-import validar_treinamento
+import classificar
+
 
 
 LOCAL_PATH = os.path.join(os.getcwd(), './datasets/treinamento.xlsx')
@@ -13,9 +16,8 @@ df_treinamento = pd.read_excel(LOCAL_PATH)
 df_treinamento_sem_d = pd.read_excel(TEST_V_PATH)
 df_resultados = pd.read_excel(RESULTADOS_PATH)
 
+
 treinamento = 1
-
-
 taxaDeAprendizagem = 0.01;
 
 resultados.limpar(df_resultados)
@@ -26,12 +28,15 @@ while treinamento  <= 5:
     pesos = [random.uniform(-1, 1) for _ in range(3)]
     limiarDeAtivacao = random.uniform(-1, 1);
 
+    erros_por_epoca = []
+
     resultados.preencher_w_iniciais(df_resultados, treinamento, pesos, limiarDeAtivacao)
 
 
     while epocas < 1000:
         epocas += 1;
         erro = False;
+        numero_de_erros = 0;
 
 
 
@@ -46,15 +51,17 @@ while treinamento  <= 5:
                 y = -1
             if y != d:
                 erro = True;
+                numero_de_erros += 1
                 for i in range(len(pesos)):
                     pesos[i] = pesos[i] + taxaDeAprendizagem * (d - y) * x[i]
                 
                 limiarDeAtivacao = limiarDeAtivacao + taxaDeAprendizagem * (d - y) * (-1)
 
                 
+        erros_por_epoca.append(numero_de_erros)
 
         if not erro:
-            pesos_fiais = pesos.copy()
+            pesos_finais = pesos.copy()
             break
 
     if epocas == 1000:
@@ -62,11 +69,20 @@ while treinamento  <= 5:
     else: 
         print('Treinamento', treinamento, 'concluído em ', epocas, ' épocas. Pesos: ', pesos)
 
-        resultados.preencher_w_finais(df_resultados, treinamento, pesos_fiais, epocas, limiarDeAtivacao)
+        resultados.preencher_w_finais(df_resultados, treinamento, pesos_finais, epocas, limiarDeAtivacao)
+        classificar.validar(pesos_finais, limiarDeAtivacao, treinamento)
 
+        plt.figure(figsize=(19.2, 10.8), dpi=100)
+        plt.plot(range(1, len(erros_por_epoca) + 1), erros_por_epoca, color='blue')
+        plt.title(f'Evolução do erro - Treinamento {treinamento}')
+        plt.xlabel('Épocas')
+        plt.ylabel('Número de erros')
+        plt.grid(True)
+        plt.tight_layout()
+        plt.savefig(f'./graphics/treinamento_{treinamento}.png')
+        
     
     treinamento += 1
         
 
 
-validar_treinamento.validar(pesos_fiais, limiarDeAtivacao)
