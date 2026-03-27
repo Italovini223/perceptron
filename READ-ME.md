@@ -7,15 +7,11 @@ Bibliotecas que precisam ser instaladas:
 Necessario criar e rodar um ambiente virtual
  - python -m venv venv
 
+Acessar ambiente
+ - venv\Scripts\activate
 
 Instalação de bibliotecas necessárias no ambiente virtual
  -  pip install pandas openpyxl matplotlib
-
-
-
-
-Acessar ambiente
- - venv\Scripts\activate
 
 Rodar Projeto
   - python perceptron.py
