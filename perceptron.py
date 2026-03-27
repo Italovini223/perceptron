@@ -16,7 +16,7 @@ df_resultados = pd.read_excel(RESULTADOS_PATH)
 
 
 treinamento = 1
-taxaDeAprendizagem = 0.01;
+taxaDeAprendizagem = 0.25;
 
 resultados.limpar(df_resultados)
 
