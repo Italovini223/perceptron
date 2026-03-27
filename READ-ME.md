@@ -9,7 +9,6 @@ Necessario criar e rodar um ambiente virtual
 
 
 Instalação de bibliotecas necessárias no ambiente virtual
- -  pip install --upgrade pip
  -  pip install pandas openpyxl matplotlib
 
 
