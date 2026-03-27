@@ -9,11 +9,9 @@ import classificar
 
 
 LOCAL_PATH = os.path.join(os.getcwd(), './datasets/treinamento.xlsx')
-TEST_V_PATH = os.path.join(os.getcwd(), './datasets/treinamento_sem_d.xlsx')
 RESULTADOS_PATH = os.path.join(os.getcwd(), './datasets/resultados.xlsx')
 
 df_treinamento = pd.read_excel(LOCAL_PATH)
-df_treinamento_sem_d = pd.read_excel(TEST_V_PATH)
 df_resultados = pd.read_excel(RESULTADOS_PATH)
 
 
