@@ -79,7 +79,7 @@ while treinamento  <= 5:
         plt.ylabel('Número de erros')
         plt.grid(True)
         plt.tight_layout()
-        plt.savefig(f'./graphics/treinamento_{treinamento}.png')
+        plt.savefig(f'./graphics/Evolucao_do_erro/treinamento_{treinamento}.png')
         
     
     treinamento += 1
