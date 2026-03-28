@@ -12,6 +12,7 @@ Acessar ambiente
 
 Instalação de bibliotecas necessárias no ambiente virtual
  -  pip install pandas openpyxl matplotlib
+ -  pip install -U scikit-learn
 
 Rodar Projeto
   - python perceptron.py

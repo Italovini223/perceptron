@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 import resultados
 import classificar
+import metricas
 
 
 
@@ -83,5 +84,5 @@ while treinamento  <= 5:
     
     treinamento += 1
         
-
+metricas.calcular()
 
