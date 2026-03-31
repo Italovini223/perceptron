@@ -3,7 +3,7 @@ import random
 import os
 import matplotlib.pyplot as plt
 from math import sqrt
-from sklearn.metrics import root_mean_squared_error
+from sklearn.metrics import mean_squared_error
 
 import resultados
 import classificar
@@ -22,14 +22,16 @@ treinamento = 1
 taxaDeAprendizagem = 0.25;
 
 
+
 resultados.limpar(df_resultados)
 
 
 while treinamento  <= 5:
     epocas = 0
-    rmse = 0
     pesos = [random.uniform(-1, 1) for _ in range(3)]
     limiarDeAtivacao = random.uniform(-1, 1);
+    rmse_por_epoca = []
+
 
 
     resultados.preencher_w_iniciais(df_resultados, treinamento, pesos, limiarDeAtivacao)
@@ -39,6 +41,7 @@ while treinamento  <= 5:
         epocas += 1;
         erro = False;
         numero_de_erros = 0;
+
 
 
 
@@ -60,9 +63,16 @@ while treinamento  <= 5:
                 
                 limiarDeAtivacao = limiarDeAtivacao + taxaDeAprendizagem * (d - y) * (-1)
             
-            
+        y_true = []
+        y_pred = []
+        for _, r in df_treinamento.iterrows():
+            x = [r['x1'], r['x2'], r['x3']]
+            y_true.append(r['d'])
+            U = sum(w * xi for w, xi in zip(pesos, x)) - limiarDeAtivacao
+            y_pred.append(1 if U >= 0 else -1)
 
-                
+        rmse_epoca = sqrt(mean_squared_error(y_true, y_pred))
+        rmse_por_epoca.append(rmse_epoca)
 
         if not erro:
             pesos_finais = pesos.copy()
@@ -90,19 +100,15 @@ while treinamento  <= 5:
         classificar.validar(pesos_finais, limiarDeAtivacao, treinamento)
 
     
-        rmse = root_mean_squared_error(df_treinamento['d'], df_treinamento[f'Y_{treinamento}'])
-
-
-        plt.figure(figsize=(19.2, 10.8), dpi=100)
-        plt.scatter(df_treinamento['d'], df_treinamento[f'Y_{treinamento}'], alpha=0.5, color='blue', label='prev')
-        plt.plot(range(df_treinamento['d']))
-        plt.title(f"RMSE TREINAMENTO {treinamento}: {rmse:.2f}")
-        plt.xlabel("valor reais")
-        plt.ylabel("valores previstos")
-        plt.legend()
+        plt.figure(figsize=(19.2, 10.8), dpi=200)
+        plt.plot(range(1, len(rmse_por_epoca)+1), rmse_por_epoca, marker='o')
+        plt.title(f'Curva de Aprendizado - Treinamento {treinamento}')
+        plt.xlabel('Épocas')
+        plt.ylabel('RMSE')
         plt.grid(True)
         plt.savefig(f'./graphics/Evolucao_do_erro/treinamento_{treinamento}.png')
-        
+        plt.close()
+                
     
     treinamento += 1
         
