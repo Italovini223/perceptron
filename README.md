@@ -16,3 +16,5 @@ Instalação de bibliotecas necessárias no ambiente virtual
 
 Rodar Projeto
   - python perceptron.py
+
+grafico de curva de apredizado
